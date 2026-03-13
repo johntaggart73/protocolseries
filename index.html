@@ -133,9 +133,9 @@
 
     /* Supporting 2-column grid */
     .chars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
-    .char-card { display: grid; grid-template-columns: 190px 1fr; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.4s; }
+    .char-card { display: grid; grid-template-columns: 190px 1fr; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.4s; min-height: 380px; }
     .char-card:hover { border-color: rgba(201,168,76,0.2); }
-    .char-card-photo { position: relative; overflow: hidden; }
+    .char-card-photo { position: relative; overflow: hidden; height: 380px; }
     .char-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(30%) contrast(1.05); transition: filter 0.5s; }
     .char-card:hover .char-card-photo img { filter: grayscale(0%) contrast(1.05); }
     .char-card-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 55%, var(--card) 100%); pointer-events: none; }
