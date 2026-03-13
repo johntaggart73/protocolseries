@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Protocol Series — John W. Taggart</title>
+  <meta name="description" content="The Protocol Series by John W. Taggart. Four books. One architecture. The truth buried in the signal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:    #07070a;
+      --deep:     #0b0b0f;
+      --surface:  #101015;
+      --card:     #13131a;
+      --border:   #1e1e28;
+      --gold:     #c9a84c;
+      --gold-dim: #8a6e2e;
+      --gold-pale:#e8d08a;
+      --text:     #c8bfaf;
+      --text-dim: #7a7060;
+      --text-faint:#3a3830;
+      --white:    #eae4d8;
+    }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--black); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; line-height: 1.8; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: linear-gradient(to bottom, rgba(7,7,10,0.98), rgba(7,7,10,0)); }
+    .nav-logo { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 4px; color: var(--gold); text-decoration: none; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 40px 80px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201,168,76,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.02) 0%, transparent 60%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%); }
+    .signal-lines { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .signal-line { position: absolute; width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), transparent); opacity: 0; animation: signal-fall 8s ease-in-out infinite; }
+    .signal-line:nth-child(1) { left: 15%; height: 120px; animation-delay: 0s; animation-duration: 7s; }
+    .signal-line:nth-child(2) { left: 30%; height: 80px; animation-delay: 2s; animation-duration: 9s; }
+    .signal-line:nth-child(3) { left: 50%; height: 160px; animation-delay: 0.5s; animation-duration: 6s; }
+    .signal-line:nth-child(4) { left: 70%; height: 100px; animation-delay: 3s; animation-duration: 8s; }
+    .signal-line:nth-child(5) { left: 85%; height: 90px; animation-delay: 1.5s; animation-duration: 10s; }
+    @keyframes signal-fall { 0% { top: -20%; opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.4; } 100% { top: 120%; opacity: 0; } }
+    .hero-eyebrow { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 24px; animation: fade-up 1s ease both; }
+    .hero-title { font-family: 'Cinzel', serif; font-size: clamp(48px, 8vw, 100px); font-weight: 600; color: var(--white); letter-spacing: 6px; line-height: 1.05; margin-bottom: 8px; animation: fade-up 1s ease 0.15s both; }
+    .hero-title span { color: var(--gold); }
+    .hero-subtitle { font-family: 'Cinzel', serif; font-size: clamp(14px, 2.5vw, 22px); font-weight: 400; color: var(--gold-dim); letter-spacing: 8px; text-transform: uppercase; margin-bottom: 40px; animation: fade-up 1s ease 0.3s both; }
+    .hero-rule { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 40px; opacity: 0.4; animation: expand 1.2s ease 0.5s both; }
+    @keyframes expand { from { width: 0; opacity: 0; } to { width: 60px; opacity: 0.4; } }
+    .hero-tagline { font-family: 'Cormorant Garamond', serif; font-size: clamp(16px, 2.5vw, 22px); font-weight: 300; font-style: italic; color: var(--text); max-width: 560px; margin: 0 auto 20px; line-height: 1.7; animation: fade-up 1s ease 0.45s both; }
+    .hero-meta { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 56px; animation: fade-up 1s ease 0.6s both; }
+    .hero-cta { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 16px 36px; text-decoration: none; transition: all 0.3s; animation: fade-up 1s ease 0.75s both; }
+    .hero-cta:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; animation: fade-up 1s ease 1s both; }
+    .hero-scroll span { font-family: 'Raleway', sans-serif; font-size: 8px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-faint); }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold-dim), transparent); animation: scroll-pulse 2s ease-in-out infinite; }
+    @keyframes scroll-pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+    /* SHARED */
+    section { position: relative; }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+    .section-header { text-align: center; margin-bottom: 80px; }
+    .section-eyebrow { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); opacity: 0.6; margin-bottom: 16px; }
+    .section-title { font-family: 'Cinzel', serif; font-size: clamp(24px, 4vw, 38px); font-weight: 400; color: var(--white); letter-spacing: 4px; }
+    .section-rule { width: 40px; height: 1px; background: var(--gold); margin: 20px auto 0; opacity: 0.3; }
+
+    /* PREMISE */
+    .premise { padding: 100px 0; background: var(--deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .premise-grid { display: grid; grid-template-columns: 1fr 2px 1fr; gap: 0 60px; align-items: center; max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+    .premise-divider { background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent); height: 200px; opacity: 0.3; }
+    .premise-label { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); opacity: 0.6; margin-bottom: 20px; }
+    .premise-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; line-height: 1.85; color: var(--text); }
+    .premise-text em { font-style: italic; color: var(--white); }
+    .premise-stat { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 4px; color: var(--gold-dim); opacity: 0.7; }
+
+    /* BOOKS */
+    .books { padding: 120px 0; }
+    .book-featured { display: grid; grid-template-columns: 300px 1fr; gap: 72px; align-items: start; margin-bottom: 80px; padding: 60px; background: var(--card); border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .book-featured::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: linear-gradient(to bottom, var(--gold), transparent); }
+    .book-featured-badge { position: absolute; top: 24px; right: 24px; font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--black); background: var(--gold); padding: 6px 14px; }
+    .book-cover-wrap { position: relative; }
+    .book-cover-wrap img { width: 100%; display: block; box-shadow: 0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.1); }
+    .book-number-bg { position: absolute; bottom: -20px; right: -20px; font-family: 'Cinzel', serif; font-size: 120px; font-weight: 600; color: rgba(201,168,76,0.04); line-height: 1; pointer-events: none; user-select: none; }
+    .book-num { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 14px; }
+    .book-title-large { font-family: 'Cinzel', serif; font-size: clamp(22px, 3vw, 34px); font-weight: 400; color: var(--white); letter-spacing: 2px; line-height: 1.2; margin-bottom: 6px; }
+    .book-tagline { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-style: italic; font-weight: 300; color: var(--gold-dim); letter-spacing: 1px; margin-bottom: 28px; opacity: 0.8; }
+    .book-rule { width: 30px; height: 1px; background: var(--gold); opacity: 0.3; margin-bottom: 28px; }
+    .book-synopsis { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; line-height: 1.85; color: var(--text); margin-bottom: 36px; }
+    .book-meta-row { display: flex; gap: 32px; margin-bottom: 36px; flex-wrap: wrap; }
+    .book-meta-item { display: flex; flex-direction: column; gap: 4px; }
+    .book-meta-label { font-family: 'Raleway', sans-serif; font-size: 7px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); opacity: 0.6; }
+    .book-meta-value { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: var(--text); }
+    .btn-primary { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--black); background: var(--gold); padding: 16px 32px; text-decoration: none; transition: all 0.3s; margin-right: 16px; }
+    .btn-primary:hover { background: var(--gold-pale); }
+    .btn-secondary { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.3); padding: 15px 32px; text-decoration: none; transition: all 0.3s; }
+    .btn-secondary:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+    .books-coming { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .book-card { background: var(--card); border: 1px solid var(--border); padding: 40px 36px; position: relative; transition: border-color 0.3s; }
+    .book-card:hover { border-color: rgba(201,168,76,0.2); }
+    .book-card-num { font-family: 'Cinzel', serif; font-size: 56px; font-weight: 600; color: rgba(201,168,76,0.06); line-height: 1; margin-bottom: 16px; }
+    .book-card-label { font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); opacity: 0.5; margin-bottom: 10px; }
+    .book-card-title { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 400; color: var(--white); letter-spacing: 1px; line-height: 1.3; margin-bottom: 16px; opacity: 0.7; }
+    .book-card-desc { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; font-style: italic; color: var(--text-dim); line-height: 1.7; margin-bottom: 24px; }
+    .coming-soon-badge { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dim); border: 1px solid rgba(201,168,76,0.15); padding: 6px 14px; opacity: 0.6; }
+
+    /* CHARACTERS */
+    .characters { padding: 120px 0; background: var(--deep); border-top: 1px solid var(--border); }
+
+    /* Daniel — Featured */
+    .char-featured { display: grid; grid-template-columns: 380px 1fr; margin-bottom: 4px; border: 1px solid var(--border); overflow: hidden; }
+    .char-featured-photo { position: relative; min-height: 520px; overflow: hidden; }
+    .char-featured-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(20%) contrast(1.05); transition: filter 0.5s; }
+    .char-featured:hover .char-featured-photo img { filter: grayscale(0%) contrast(1.05); }
+    .char-featured-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 70%, var(--card) 100%); pointer-events: none; }
+    .char-featured-info { padding: 56px 56px 56px 48px; background: var(--card); position: relative; }
+    .char-featured-info::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, var(--gold), transparent); }
+    .char-role-badge { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--black); background: var(--gold); padding: 5px 12px; margin-bottom: 20px; }
+    .char-name { font-family: 'Cinzel', serif; font-size: clamp(26px, 3.5vw, 40px); font-weight: 400; color: var(--white); letter-spacing: 3px; line-height: 1.1; margin-bottom: 6px; }
+    .char-title-text { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; color: var(--gold-dim); letter-spacing: 1px; margin-bottom: 28px; opacity: 0.8; }
+    .char-rule { width: 30px; height: 1px; background: var(--gold); opacity: 0.3; margin-bottom: 28px; }
+    .char-bio { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 300; line-height: 1.9; color: var(--text); margin-bottom: 20px; }
+    .char-traits { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .char-trait { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .char-trait:last-child { border-bottom: none; padding-bottom: 0; }
+    .trait-label { font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dim); opacity: 0.6; min-width: 80px; padding-top: 3px; flex-shrink: 0; }
+    .trait-value { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: var(--text); line-height: 1.6; }
+
+    /* Supporting 2-column grid */
+    .chars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
+    .char-card { display: grid; grid-template-columns: 190px 1fr; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.4s; }
+    .char-card:hover { border-color: rgba(201,168,76,0.2); }
+    .char-card-photo { position: relative; overflow: hidden; }
+    .char-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(30%) contrast(1.05); transition: filter 0.5s; }
+    .char-card:hover .char-card-photo img { filter: grayscale(0%) contrast(1.05); }
+    .char-card-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 55%, var(--card) 100%); pointer-events: none; }
+    .char-card-info { padding: 32px 32px 32px 24px; }
+    .char-card-badge { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.2); padding: 4px 10px; margin-bottom: 12px; opacity: 0.7; }
+    .char-card-name { font-family: 'Cinzel', serif; font-size: 19px; font-weight: 400; color: var(--white); letter-spacing: 2px; line-height: 1.2; margin-bottom: 4px; }
+    .char-card-role { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-style: italic; color: var(--gold-dim); margin-bottom: 14px; opacity: 0.7; }
+    .char-card-rule { width: 20px; height: 1px; background: var(--gold); opacity: 0.2; margin-bottom: 14px; }
+    .char-card-bio { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--text-dim); margin-bottom: 16px; }
+    .char-card-traits { display: flex; flex-direction: column; gap: 8px; }
+    .char-card-trait { display: flex; gap: 12px; }
+    .cct-label { font-family: 'Raleway', sans-serif; font-size: 7px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-dim); opacity: 0.5; min-width: 62px; padding-top: 2px; flex-shrink: 0; }
+    .cct-value { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+    /* Ethan — Antagonist full width */
+    .char-antagonist { display: grid; grid-template-columns: 1fr 360px; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.4s; }
+    .char-antagonist:hover { border-color: rgba(180,60,60,0.2); }
+    .char-antagonist-info { padding: 56px; position: relative; }
+    .char-antagonist-info::after { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: linear-gradient(to bottom, rgba(180,60,60,0.4), transparent); }
+    .char-antagonist-photo { position: relative; overflow: hidden; }
+    .char-antagonist-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(30%) contrast(1.05); transition: filter 0.5s; }
+    .char-antagonist:hover .char-antagonist-photo img { filter: grayscale(0%) contrast(1.05); }
+    .char-antagonist-photo::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to left, transparent 55%, var(--card) 100%); pointer-events: none; }
+    .antagonist-badge { display: inline-block; font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: rgba(200,80,80,0.8); border: 1px solid rgba(180,60,60,0.25); padding: 4px 10px; margin-bottom: 16px; }
+
+    /* UNIVERSE */
+    .universe { padding: 120px 0; text-align: center; }
+    .universe-inner { max-width: 760px; margin: 0 auto; padding: 0 48px; }
+    .universe-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; line-height: 1.9; color: var(--text); margin-bottom: 20px; }
+    .universe-text em { color: var(--white); font-style: italic; }
+    .universe-series-row { display: flex; justify-content: center; margin: 56px 0; }
+    .universe-series-item { padding: 28px 40px; border: 1px solid var(--border); text-align: center; flex: 1; max-width: 220px; transition: border-color 0.3s; }
+    .universe-series-item.active { border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.03); }
+    .universe-series-item:not(:last-child) { border-right: none; }
+    .series-item-label { font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); opacity: 0.5; margin-bottom: 8px; }
+    .series-item-name { font-family: 'Cinzel', serif; font-size: 14px; color: var(--white); letter-spacing: 2px; opacity: 0.5; }
+    .universe-series-item.active .series-item-name { color: var(--gold); opacity: 1; }
+    .universe-series-item.active .series-item-label { color: var(--gold-dim); opacity: 0.7; }
+
+    /* NEWSLETTER */
+    .newsletter { padding: 100px 0; background: var(--surface); border-top: 1px solid var(--border); }
+    .newsletter-inner { max-width: 560px; margin: 0 auto; padding: 0 48px; text-align: center; }
+    .newsletter-title { font-family: 'Cinzel', serif; font-size: 26px; font-weight: 400; color: var(--white); letter-spacing: 3px; margin-bottom: 16px; }
+    .newsletter-sub { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; color: var(--text-dim); margin-bottom: 40px; line-height: 1.7; }
+    .newsletter-form { display: flex; }
+    .newsletter-input { flex: 1; background: var(--card); border: 1px solid var(--border); border-right: none; color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 16px; padding: 16px 20px; outline: none; transition: border-color 0.3s; }
+    .newsletter-input::placeholder { color: var(--text-faint); }
+    .newsletter-input:focus { border-color: rgba(201,168,76,0.3); }
+    .newsletter-btn { background: var(--gold); border: none; color: var(--black); font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; padding: 16px 24px; cursor: pointer; transition: background 0.3s; white-space: nowrap; }
+    .newsletter-btn:hover { background: var(--gold-pale); }
+    .newsletter-note { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); margin-top: 16px; }
+
+    /* FOOTER */
+    footer { padding: 48px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .footer-left { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; color: var(--text-faint); }
+    .footer-right { display: flex; gap: 32px; }
+    .footer-right a { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--text-faint); text-decoration: none; transition: color 0.3s; }
+    .footer-right a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1000px) {
+      .char-featured { grid-template-columns: 1fr; }
+      .char-featured-photo { min-height: 380px; }
+      .char-featured-photo::after { background: linear-gradient(to bottom, transparent 60%, var(--card) 100%); }
+      .chars-grid { grid-template-columns: 1fr; }
+      .char-antagonist { grid-template-columns: 1fr; }
+      .char-antagonist-photo { min-height: 360px; }
+      .char-antagonist-photo::before { background: linear-gradient(to bottom, transparent 60%, var(--card) 100%); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .nav-links li:nth-child(3) { display: none; }
+      .premise-grid { grid-template-columns: 1fr; }
+      .premise-divider { display: none; }
+      .book-featured { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+      .books-coming { grid-template-columns: 1fr; }
+      .char-card { grid-template-columns: 1fr; }
+      .char-card-photo { min-height: 260px; }
+      .char-card-photo::after { background: linear-gradient(to bottom, transparent 60%, var(--card) 100%); }
+      .char-featured-info { padding: 36px 24px; }
+      .char-antagonist-info { padding: 36px 24px; }
+      .universe-series-row { flex-direction: column; align-items: center; }
+      .universe-series-item { max-width: 100%; width: 100%; }
+      .universe-series-item:not(:last-child) { border-right: 1px solid var(--border); border-bottom: none; }
+      .newsletter-form { flex-direction: column; }
+      .newsletter-input { border-right: 1px solid var(--border); border-bottom: none; }
+      footer { flex-direction: column; text-align: center; padding: 32px 24px; }
+      .section-inner, .premise-grid, .newsletter-inner, .universe-inner { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://www.johnwtaggart.com" class="nav-logo">John W. Taggart</a>
+    <ul class="nav-links">
+      <li><a href="#books">Books</a></li>
+      <li><a href="#characters">Characters</a></li>
+      <li><a href="#universe">The Universe</a></li>
+      <li><a href="https://a.co/d/06tgzZIH" target="_blank">Order Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="signal-lines">
+      <div class="signal-line"></div><div class="signal-line"></div><div class="signal-line"></div><div class="signal-line"></div><div class="signal-line"></div>
+    </div>
+    <p class="hero-eyebrow">John W. Taggart</p>
+    <h1 class="hero-title">The <span>Protocol</span></h1>
+    <p class="hero-subtitle">Series</p>
+    <div class="hero-rule"></div>
+    <p class="hero-tagline">Four books. One protagonist. A signal buried in the architecture of history.</p>
+    <p class="hero-meta">Techno-Archaeological Thriller &nbsp;·&nbsp; Four Volumes</p>
+    <a href="#books" class="hero-cta">Explore the Series</a>
+    <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+  </section>
+
+  <!-- PREMISE -->
+  <section class="premise">
+    <div class="premise-grid">
+      <div>
+        <p class="premise-label">The Series</p>
+        <p class="premise-text">The Protocol Series follows <em>Daniel Mercer</em> — orbital analyst, reluctant investigator, and the only person in a position to recognize what the data is actually saying. Four books. A single unbroken thread. Each volume tightens the architecture until the truth is no longer deniable.</p>
+      </div>
+      <div class="premise-divider"></div>
+      <div>
+        <p class="premise-label">The Architecture</p>
+        <p class="premise-text">The Protocol Series is the first of three interconnected series. Read alone, it resolves completely. Read alongside <em>The Directive Series</em> and <em>The Sequence Series</em>, the full connected universe reveals itself — twelve books, three protagonists, one hidden design.</p>
+        <br /><p class="premise-stat">Protocol · Directive · Sequence</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKS -->
+  <section class="books" id="books">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="section-eyebrow">The Complete Series</p>
+        <h2 class="section-title">Four Volumes</h2>
+        <div class="section-rule"></div>
+      </div>
+      <div class="book-featured">
+        <div class="book-featured-badge">Available Now</div>
+        <div class="book-cover-wrap">
+          <img src="https://www.therecurrenceprotocol.com/trp-cover.jpg" alt="The Recurrence Protocol" />
+          <div class="book-number-bg">I</div>
+        </div>
+        <div>
+          <p class="book-num">Book I of IV &nbsp;·&nbsp; The Protocol Series</p>
+          <h2 class="book-title-large">The Recurrence Protocol</h2>
+          <p class="book-tagline">The signal was never random. Neither was the silence.</p>
+          <div class="book-rule"></div>
+          <p class="book-synopsis">When orbital analyst Daniel Mercer detects an anomaly in the precision timing systems monitoring asteroid Apophis, he assumes it's a calibration error. It isn't. The signal is coherent, patterned, and old — far older than anything that should exist in the data. Following the trail pulls Daniel out of the observatory and into a world where the wrong discovery gets people killed, and where the institutions built to protect knowledge are the most dangerous ones of all.</p>
+          <div class="book-meta-row">
+            <div class="book-meta-item"><span class="book-meta-label">Status</span><span class="book-meta-value">Published 2026</span></div>
+            <div class="book-meta-item"><span class="book-meta-label">ISBN</span><span class="book-meta-value">979-8-2507-4448-5</span></div>
+            <div class="book-meta-item"><span class="book-meta-label">Genre</span><span class="book-meta-value">Techno-Archaeological Thriller</span></div>
+          </div>
+          <a href="https://a.co/d/06tgzZIH" target="_blank" class="btn-primary">Order on Amazon</a>
+          <a href="https://www.therecurrenceprotocol.com" class="btn-secondary">Learn More</a>
+        </div>
+      </div>
+      <div class="books-coming">
+        <div class="book-card">
+          <div class="book-card-num">II</div>
+          <p class="book-card-label">Book II of IV</p>
+          <h3 class="book-card-title">The Alignment Protocol</h3>
+          <p class="book-card-desc">The signal has a source. Finding it means returning to the last place Daniel should go — and confronting the institution that built the silence around it.</p>
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+        <div class="book-card">
+          <div class="book-card-num">III</div>
+          <p class="book-card-label">Book III of IV</p>
+          <h3 class="book-card-title">The Origin Protocol</h3>
+          <p class="book-card-desc">The architecture of the signal is older than recorded history. The question is no longer what it means — it's who built it, and whether they ever stopped transmitting.</p>
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+        <div class="book-card">
+          <div class="book-card-num">IV</div>
+          <p class="book-card-label">Book IV of IV</p>
+          <h3 class="book-card-title">The Terminal Protocol</h3>
+          <p class="book-card-desc">The final volume. Every discovery, every loss, every thread Daniel has followed converges here. The last book in the connected universe to be published — for a reason.</p>
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHARACTERS -->
+  <section class="characters" id="characters">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="section-eyebrow">The People in the Signal</p>
+        <h2 class="section-title">Characters</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <!-- Daniel — Protagonist, featured full-width -->
+      <div class="char-featured">
+        <div class="char-featured-photo">
+          <img src="daniel-mercer.jpg" alt="Daniel Mercer" />
+        </div>
+        <div class="char-featured-info">
+          <span class="char-role-badge">Protagonist</span>
+          <h3 class="char-name">Daniel Mercer</h3>
+          <p class="char-title-text">Orbital Analyst · NASA Jet Propulsion Laboratory</p>
+          <div class="char-rule"></div>
+          <p class="char-bio">Daniel Mercer is not a field man. He is precise, methodical, and most comfortable when the data is the only voice in the room. Forty-seven years old, tall with the lean build of someone who once ran seriously and kept the frame without always keeping the miles — his hair gone noticeably gray at the temples, his hands carrying the economy of someone who has spent decades working with instruments that punish imprecision. His back is an ongoing negotiation. He does not complain about things he cannot change.</p>
+          <p class="char-bio">He monitors near-Earth objects from a position that should insulate him from the messier side of discovery. It doesn't. What makes Daniel dangerous — to the people who want the signal buried — is that he is constitutionally incapable of accepting a pattern he cannot explain. He doesn't chase the truth. He follows it, step by careful step, until there is no alternative interpretation left.</p>
+          <div class="char-traits">
+            <div class="char-trait"><span class="trait-label">Expertise</span><span class="trait-value">Orbital mechanics, precision timing systems, near-Earth object monitoring</span></div>
+            <div class="char-trait"><span class="trait-label">Method</span><span class="trait-value">Evidence-first. Never conjecture ahead of the data. Follows the anomaly wherever it leads, regardless of where that is.</span></div>
+            <div class="char-trait"><span class="trait-label">Weakness</span><span class="trait-value">Operates alone by instinct. Trusts systems more than people — until the systems are the thing that's compromised.</span></div>
+            <div class="char-trait"><span class="trait-label">Arc</span><span class="trait-value">Four books. Each volume leaves him further from certainty and closer to the thing that cannot be unexplained.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Miriam + Claire side by side -->
+      <div class="chars-grid">
+        <div class="char-card">
+          <div class="char-card-photo"><img src="miriam-hale.jpg" alt="Miriam Hale" /></div>
+          <div class="char-card-info">
+            <span class="char-card-badge">Ally</span>
+            <h3 class="char-card-name">Miriam Hale</h3>
+            <p class="char-card-role">Lead Archaeologist · Karahantepe Excavation</p>
+            <div class="char-card-rule"></div>
+            <p class="char-card-bio">Forty-two years old. Dark olive complexion, nearly black eyes that make graduate students nervous in seminars — the look of someone evaluating what you're saying against a standard you weren't told about. A pale scar along her left forearm from a trench collapse at Çatalhöyük, which she mentions once to new field students as an example of why you shore the walls. She is the person who finds what Daniel's data is pointing toward — in stone, in earth, in the patient record of people who built things to last twelve thousand years.</p>
+            <div class="char-card-traits">
+              <div class="char-card-trait"><span class="cct-label">Expertise</span><span class="cct-value">Neolithic archaeology, excavation, symbolic analysis, megalithic sites</span></div>
+              <div class="char-card-trait"><span class="cct-label">Role</span><span class="cct-value">Translates the physical record. Grounds Daniel's data in the actual earth.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-card-photo"><img src="claire-dolan.jpg" alt="Claire Dolan" /></div>
+          <div class="char-card-info">
+            <span class="char-card-badge">Ally</span>
+            <h3 class="char-card-name">Claire Dolan</h3>
+            <p class="char-card-role">Investigative Journalist · Science & Infrastructure</p>
+            <div class="char-card-rule"></div>
+            <p class="char-card-bio">Sharp, patient, and already awake when Daniel calls at three in the morning. Claire has been embedded in this story longer than anyone realizes. She pressed the routing identifier into Daniel's hand at Iqbal's memorial and has been keeping her personal phone charged and close ever since. She knows everyone in every coordination role that touches timing infrastructure. She knows how institutional silence works. She answers on the third ring because it would be suspicious to answer on the first.</p>
+            <div class="char-card-traits">
+              <div class="char-card-trait"><span class="cct-label">Expertise</span><span class="cct-value">Investigative journalism, source networks, institutional exposure</span></div>
+              <div class="char-card-trait"><span class="cct-label">Role</span><span class="cct-value">The mechanism that makes the truth irreversible once it's found.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-card-photo"><img src="marcus-trent.jpg" alt="Marcus Trent" /></div>
+          <div class="char-card-info">
+            <span class="char-card-badge">Ally</span>
+            <h3 class="char-card-name">Marcus Trent</h3>
+            <p class="char-card-role">Geophysicist · University of Houston</p>
+            <div class="char-card-rule"></div>
+            <p class="char-card-bio">Early forties, running a civilian atomic clock network from a third-floor lab at UH that smells of server heat and old coffee. Eighty-seven reference stations across three continents. Methodical, skeptical of conclusions that outrun data, constitutionally resistant to drama. He orders lunch without being asked, notes without turning from his screen that he wants it on record he was in the room when history was made, and is almost never wrong about the numbers. He is the infrastructure beneath the investigation — quiet, essential, unshakable.</p>
+            <div class="char-card-traits">
+              <div class="char-card-trait"><span class="cct-label">Expertise</span><span class="cct-value">Atomic clock networks, GPS timing, geophysical data analysis</span></div>
+              <div class="char-card-trait"><span class="cct-label">Role</span><span class="cct-value">The technical foundation. Without Marcus, there is no investigation.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty 4th cell to keep grid balanced — invisible -->
+        <div style="background: transparent; border: none;"></div>
+      </div>
+
+      <!-- Ethan — Antagonist, full width reversed -->
+      <div class="char-antagonist">
+        <div class="char-antagonist-info">
+          <span class="antagonist-badge">Antagonist</span>
+          <h3 class="char-name">Ethan Cole</h3>
+          <p class="char-title-text">Director · Planetary Defense Coordination Office</p>
+          <div class="char-rule"></div>
+          <p class="char-bio">Daniel's graduate school friend. The better politician between them, even then — Ethan understood how to move through institutions without scraping against them, while Daniel understood how to push until something gave. They valued this about each other once. Now it is simply the shape of their disagreement. Late forties, almost unchanged from his graduate school years in the ways that matter: same deliberate movements, same tendency to scan a room before speaking, same controlled expression that gives nothing away. Age has added lines at the corners of his eyes and a restraint that wasn't there at twenty-two.</p>
+          <p class="char-bio">Ethan is not a simple villain. He believes that what he is doing is necessary — that some truths, released at the wrong time and in the wrong way, cause more harm than the silence around them. He is not wrong about everything. That is what makes him dangerous.</p>
+          <div class="char-traits">
+            <div class="char-trait"><span class="trait-label">Motivation</span><span class="trait-value">Institutional preservation. The genuine belief that controlling disclosure is protection, not suppression.</span></div>
+            <div class="char-trait"><span class="trait-label">Relationship</span><span class="trait-value">Former friend. He knows Daniel will push. That's exactly why he's trying to contain him before it gets to that.</span></div>
+            <div class="char-trait"><span class="trait-label">Method</span><span class="trait-value">Language. Framing. Institutional weight applied quietly, before anyone has to be obvious about it.</span></div>
+          </div>
+        </div>
+        <div class="char-antagonist-photo">
+          <img src="ethan-cole.jpg" alt="Ethan Cole" />
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- UNIVERSE -->
+  <section class="universe" id="universe">
+    <div class="universe-inner">
+      <p class="section-eyebrow">The Connected Universe</p>
+      <h2 class="section-title" style="margin-bottom:24px;">Three Series. Twelve Books.</h2>
+      <div class="section-rule" style="margin-bottom:40px;"></div>
+      <p class="universe-text">The Protocol Series is the entry point. <em>The Directive Series</em> runs parallel — a different protagonist, a different angle on the same hidden architecture. <em>The Sequence Series</em> completes the triangle. Three characters who never meet. Three investigations that converge on the same truth.</p>
+      <p class="universe-text">Read any series alone and the story resolves. Read all three and the universe opens.</p>
+      <div class="universe-series-row">
+        <div class="universe-series-item active"><p class="series-item-label">You are here</p><p class="series-item-name">Protocol</p></div>
+        <div class="universe-series-item"><p class="series-item-label">Coming Soon</p><p class="series-item-name">Directive</p></div>
+        <div class="universe-series-item"><p class="series-item-label">Coming Soon</p><p class="series-item-name">Sequence</p></div>
+      </div>
+      <a href="https://www.johnwtaggart.com" class="hero-cta">Full Series Roadmap →</a>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="newsletter-inner">
+      <p class="section-eyebrow" style="margin-bottom:16px;">Stay in the Signal</p>
+      <h2 class="newsletter-title">Get Series Updates</h2>
+      <p class="newsletter-sub">Cover reveals, release dates, and dispatches from the research behind the books. No noise. Just signal.</p>
+      <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+        <input type="email" class="newsletter-input" placeholder="Your email address" id="nl-email" required />
+        <button type="submit" class="newsletter-btn">Subscribe</button>
+      </form>
+      <p class="newsletter-note" id="nl-msg">No spam. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">The Protocol Series &nbsp;·&nbsp; John W. Taggart</div>
+    <div class="footer-right">
+      <a href="https://www.johnwtaggart.com">Author Site</a>
+      <a href="https://a.co/d/06tgzZIH" target="_blank">Amazon</a>
+      <a href="https://www.therecurrenceprotocol.com">Book I</a>
+    </div>
+  </footer>
+
+  <script>
+    async function handleSubscribe(e) {
+      e.preventDefault();
+      const email = document.getElementById('nl-email').value;
+      const msg = document.getElementById('nl-msg');
+      try {
+        const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_MAILERLITE_API_TOKEN' },
+          body: JSON.stringify({ email, groups: ['181820865412859816'] })
+        });
+        if (res.ok) { msg.textContent = "You're in. Welcome to the universe."; msg.style.color = '#c9a84c'; document.getElementById('nl-email').value = ''; }
+        else { msg.textContent = 'Something went wrong. Try again.'; }
+      } catch { msg.textContent = 'Something went wrong. Try again.'; }
+    }
+  </script>
+</body>
+</html>
